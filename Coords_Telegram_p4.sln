@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordsTelegram.RabbitMQ", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordsTelegram.API", "CoordsTelegram.API\CoordsTelegram.API.csproj", "{9CBDC377-75CB-4C9A-91EA-1C503FD15A96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordsTelegram.EF_Core", "CoordsTelegram.EF_Core\CoordsTelegram.EF_Core.csproj", "{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordsTelegram.TelegramBot", "CoordsTelegram.Telegram\CoordsTelegram.TelegramBot.csproj", "{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,14 @@ Global
 		{9CBDC377-75CB-4C9A-91EA-1C503FD15A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CBDC377-75CB-4C9A-91EA-1C503FD15A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CBDC377-75CB-4C9A-91EA-1C503FD15A96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +71,8 @@ Global
 		{34277489-1CF0-402C-81BB-D9693B4FE5A9} = {683E4F52-F821-4F97-B1B3-62FED8639804}
 		{815F12A8-ACBC-40C8-A811-A8012C6AFDFC} = {C5E05F4B-405B-4B84-A672-3E73D2F1347C}
 		{9CBDC377-75CB-4C9A-91EA-1C503FD15A96} = {C621D0AD-2DA3-4E4B-A3EF-05966A6305AA}
+		{EB2C7643-48E5-4CCC-8C5E-BFC9C058F7ED} = {683E4F52-F821-4F97-B1B3-62FED8639804}
+		{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787} = {C5E05F4B-405B-4B84-A672-3E73D2F1347C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1E41BD7-2CAF-4F54-B199-D2F9AD71F22F}

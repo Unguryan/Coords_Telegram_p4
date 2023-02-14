@@ -10,6 +10,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoordsTelegram.EF_Core\CoordsTelegram.EF_Core.csproj" />
+    <ProjectReference Include="..\CoordsTelegram.Infrastructure\CoordsTelegram.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoordsTelegram.RabbitMQ\CoordsTelegram.RabbitMQ.csproj" />
+    <ProjectReference Include="..\CoordsTelegram.Telegram\CoordsTelegram.TelegramBot.csproj" />
   </ItemGroup>
 
 </Project>
