@@ -11,6 +11,8 @@ namespace CoordsTelegram.App.Repositories
 
         Task<List<TokenInfoViewModel>> GetTokensAsync();
 
+        Task<List<TokenInfoViewModel>> GetTokensByChatIdAsync(string chatId);
+
         Task<bool> RemoveByKeyAsync(string key);
 
         Task<int> RemoveRangeByKeyAsync(List<string> key);

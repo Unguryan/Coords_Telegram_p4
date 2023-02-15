@@ -15,6 +15,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddTelegramBot(builder.Configuration);
 builder.Services.AddNotifications(builder.Configuration);
 
+builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +28,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x =>
+{
+    x.AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader();
+});
+
 
 var botOptions = app.Services.GetRequiredService<IOptions<TelegramBotOptions>>();
 app.MapBotWebhookRoute<BotController>(route: botOptions.Value.Route);

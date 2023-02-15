@@ -49,6 +49,13 @@ namespace CoordsTelegram.EF_Core.Services
             return result;
         }
 
+        public async Task<List<TokenInfoViewModel>> GetTokensByChatIdAsync(string chatId)
+        {
+            var result = new List<TokenInfoViewModel>();
+            await _context.Tokens.Where(x => x.ChatId == chatId).ForEachAsync(t => result.Add(_mapper.Map<TokenInfoViewModel>(t)));
+            return result;
+        }
+
         public async Task<bool> RemoveByKeyAsync(string key)
         {
             var entity = await _context.Tokens.FirstOrDefaultAsync(x => x.Key == key);

@@ -51,6 +51,13 @@ namespace CoordsTelegram.Infrastructure.Services
 
         public async Task<bool> SetTokenInfoByKeyAsync(AddTokenViewModel request)
         {
+            var oldTokens = await _tokenRepository.GetTokensByChatIdAsync(request.ChatId);
+
+            if(oldTokens != null && oldTokens.Any())
+            {
+                await _tokenRepository.RemoveRangeByKeyAsync(oldTokens.Select(x => x.Key).ToList());
+            }
+
             return await _tokenRepository.AddTokenAsync(request, DateTime.Now.AddHours(1));
         }
     }
