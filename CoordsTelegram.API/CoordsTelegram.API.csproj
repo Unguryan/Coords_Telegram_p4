@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoordsTelegram.EF_Core\CoordsTelegram.EF_Core.csproj" />
     <ProjectReference Include="..\CoordsTelegram.Infrastructure\CoordsTelegram.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoordsTelegram.Notifications\CoordsTelegram.Notifications.csproj" />
     <ProjectReference Include="..\CoordsTelegram.RabbitMQ\CoordsTelegram.RabbitMQ.csproj" />
     <ProjectReference Include="..\CoordsTelegram.Telegram\CoordsTelegram.TelegramBot.csproj" />
   </ItemGroup>

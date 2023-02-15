@@ -30,12 +30,12 @@ namespace CoordsTelegram.App.Commands.AddTelegramUser
             {
                 var errorsStr = string.Empty;
                 validateRes.Errors.ForEach(e => errorsStr += $"{e}\n");
-                return new AddTelegramUserCommandResult(false, errorsStr);
+                return new AddTelegramUserCommandResult(false, null, errorsStr);
             }
 
             var result = await _telegramUserService.AddTelegramUserAsync(_mapper.Map<CreateTelegramUserViewModel>(request));
 
-            return new AddTelegramUserCommandResult(result);
+            return new AddTelegramUserCommandResult(result.IsAdded, result.User);
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using CoordsTelegram.App.Services;
+using CoordsTelegram.App.Repositories;
 using CoordsTelegram.Domain.Models;
 using CoordsTelegram.Domain.ViewModels;
 using CoordsTelegram.EF_Core.Context;
 using CoordsTelegram.EF_Core.Dbo;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CoordsTelegram.EF_Core.Services
 {

@@ -1,4 +1,5 @@
-﻿using CoordsTelegram.App.Services;
+﻿using CoordsTelegram.App.Repositories;
+using CoordsTelegram.App.Services;
 
 namespace CoordsTelegram.Infrastructure.Services
 {
@@ -13,7 +14,7 @@ namespace CoordsTelegram.Infrastructure.Services
 
         public async Task<int> CleanExpiredLinksAsync()
         {
-            var links = await _authRepository.GetAuthLinks();
+            var links = await _authRepository.GetAuthLinksAsync();
 
             var linksToRemove = links.Where(l => l.IsExpired && string.IsNullOrEmpty(l.ChatId))
                                          //(string.IsNullOrEmpty(l.PhoneNumber) || string.IsNullOrEmpty(l.FullName)))
@@ -22,7 +23,7 @@ namespace CoordsTelegram.Infrastructure.Services
             var oldLinks = links.Where(l => DateTime.Now > l.Expired.AddMinutes(10)).Select(l => l.Key).ToList();
             linksToRemove.AddRange(oldLinks);
 
-            return await _authRepository.RemoveRangeByKey(linksToRemove);
+            return await _authRepository.RemoveRangeByKeyAsync(linksToRemove);
         }
     }
 }

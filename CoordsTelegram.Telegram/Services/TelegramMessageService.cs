@@ -1,5 +1,7 @@
 ﻿using CoordsTelegram.App.Commands.AddChatIdToAuthLink;
 using CoordsTelegram.App.Commands.AddTelegramUser;
+using CoordsTelegram.App.Commands.AddUserToAuthLink;
+using CoordsTelegram.App.Commands.SendLoginNotification;
 using CoordsTelegram.App.Queries.GetAuthLink;
 using CoordsTelegram.App.Queries.GetAuthLinkByChatId;
 using CoordsTelegram.App.Queries.GetTelegramUser;
@@ -60,13 +62,27 @@ namespace CoordsTelegram.Telegram.Services
                     await SendRequestContactMessage(message.Chat);
                     return;
                 }
+                
+                var isAddedUserResult = await _mediator.Send(new AddUserToAuthLinkCommand(authCode, telegramUserResult.TelegramUser));
+                if (!isAddedUserResult.IsAdded)
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{isAddedUserResult?.ErrorMessage}");
+                    return;
+                }
 
-
+                var notificationResult = await _mediator.Send(new SendLoginNotificationCommand(authCode));
                 //If key and user exist, just send notification to Angular App 
                 //....telegramUserResult && authLinkResult
                 //_notificationService.SendNotification() -> ANGULAR
 
-                await SendMessageAsync(message.Chat, "Вхід дозволено✅. Перейдіть до сайту.");
+                if (notificationResult.IsSent)
+                {
+                    await SendMessageAsync(message.Chat, "Вхід дозволено✅. Перейдіть до сайту.");
+                }
+                else
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{notificationResult?.ErrorMessage}");
+                }
             }
 
 
@@ -95,11 +111,26 @@ namespace CoordsTelegram.Telegram.Services
                     return;
                 }
 
+                var isAddedUserResult = await _mediator.Send(new AddUserToAuthLinkCommand(authLinkResult.AuthLink.Key, res.User));
+                if (!isAddedUserResult.IsAdded)
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{res?.ErrorMessage}");
+                    return;
+                }
+
                 //....telegramUserResult && authLinkResult
                 //_notificationService.SendNotification() -> ANGULAR
 
+                var notificationResult = await _mediator.Send(new SendLoginNotificationCommand(authLinkResult.AuthLink.Key));
 
-                await SendMessageAsync(message.Chat, "Вхід дозволено✅. Перейдіть до сайту.");
+                if (notificationResult.IsSent)
+                {
+                    await SendMessageAsync(message.Chat, "Вхід дозволено✅. Перейдіть до сайту.");
+                }
+                else
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{notificationResult?.ErrorMessage}");
+                }
             }
         }
 

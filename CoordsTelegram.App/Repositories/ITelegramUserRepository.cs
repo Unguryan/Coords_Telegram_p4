@@ -1,7 +1,7 @@
 ﻿using CoordsTelegram.Domain.Models;
 using CoordsTelegram.Domain.ViewModels;
 
-namespace CoordsTelegram.App.Services
+namespace CoordsTelegram.App.Repositories
 {
     public interface ITelegramUserRepository
     {

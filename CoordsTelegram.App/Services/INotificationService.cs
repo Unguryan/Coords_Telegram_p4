@@ -1,7 +1,9 @@
-﻿namespace CoordsTelegram.App.Services
+﻿using CoordsTelegram.Domain.ViewModels;
+
+namespace CoordsTelegram.App.Services
 {
     public interface INotificationService
     {
-        Task<bool> SendSuccessLoginNotification(string key);
+        Task<bool> SendSuccessLoginNotification(GetTokenInfoViewModel token);
     }
 }

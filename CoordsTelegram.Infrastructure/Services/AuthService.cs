@@ -1,4 +1,6 @@
-﻿using CoordsTelegram.App.Services;
+﻿using AutoMapper;
+using CoordsTelegram.App.Repositories;
+using CoordsTelegram.App.Services;
 using CoordsTelegram.Domain.Models;
 using CoordsTelegram.Domain.ViewModels;
 
@@ -8,17 +10,19 @@ namespace CoordsTelegram.Infrastructure.Services
     {
         private readonly IAuthRepository _authRepository;
         private readonly IAuthLinkGenerator _authLinkGenerator;
+        private readonly IMapper _mapper;
 
-        public AuthService(IAuthRepository authRepository, IAuthLinkGenerator authLinkGenerator)
+        public AuthService(IAuthRepository authRepository, IAuthLinkGenerator authLinkGenerator, IMapper mapper)
         {
             _authRepository = authRepository;
             _authLinkGenerator = authLinkGenerator;
+            _mapper = mapper;
         }
 
         public async Task<CreateAuthLinkViewModel> CreateAuthLinkAsync(CancellationToken cancellationToken = default)
         {
             var authViewModel = await _authLinkGenerator.Generate();
-            var result = await _authRepository.AddNewKey(authViewModel.Key);
+            var result = await _authRepository.AddNewKeyAsync(authViewModel.Key);
 
             if (!result)
             {
@@ -30,12 +34,12 @@ namespace CoordsTelegram.Infrastructure.Services
 
         public async Task<AuthLink?> GetAuthLinkByChatIdAsync(string chatId)
         {
-            var authLinks = (await _authRepository.GetAuthLinksByChatId(chatId));
+            var authLinks = (await _authRepository.GetAuthLinksByChatIdAsync(chatId));
 
             var linkToRevome = authLinks.Where(x => x.IsExpired);
             if (authLinks != null && authLinks.Any())
             {
-                await _authRepository.RemoveRangeByKey(linkToRevome.Select(x => x.Key).ToList());
+                await _authRepository.RemoveRangeByKeyAsync(linkToRevome.Select(x => x.Key).ToList());
             }
 
             var remainedLinks = authLinks?.Except(linkToRevome);
@@ -47,20 +51,37 @@ namespace CoordsTelegram.Infrastructure.Services
 
         public async Task<AuthLink?> GetAuthLinkByKeyAsync(string key)
         {
-            return await _authRepository.GetAuthLinkByKey(key);
+            return await _authRepository.GetAuthLinkByKeyAsync(key);
+        }
+
+        public async Task<bool> RemoveLinkAsync(string key)
+        {
+            return await _authRepository.RemoveByKeyAsync(key);
         }
 
         public async Task<bool> UpdateChatIdAuthLinkAsync(string key, string chatId)
         {
-            //AddLogicHERE -> Need to have only one activeLink
-            var authLinks = (await _authRepository.GetAuthLinksByChatId(chatId)).Where(x => x.Key != key);
+            //remove oldest 
+            var authLinks = (await _authRepository.GetAuthLinksByChatIdAsync(chatId)).Where(x => x.Key != key);
 
             if(authLinks != null && authLinks.Any())
             {
-                await _authRepository.RemoveRangeByKey(authLinks.Select(x => x.Key).ToList());
+                await _authRepository.RemoveRangeByKeyAsync(authLinks.Select(x => x.Key).ToList());
             }
 
-            return await _authRepository.ChangeByKey(key, chatId);
+            return await _authRepository.ChangeByKeyAsync(key, chatId);
+        }
+
+        public async Task<bool> UpdateUserAuthLinkAsync(string key, TelegramUser user)
+        {
+            var authLink = _authRepository.GetAuthLinkByKeyAsync(key);
+
+            if (authLink == null)
+            {
+                return false;   
+            }
+
+            return await _authRepository.ChangeByKeyAsync(key, _mapper.Map<TelegramUserInfoViewModel>(user));
         }
     }
 }

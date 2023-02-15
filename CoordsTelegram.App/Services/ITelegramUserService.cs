@@ -5,7 +5,7 @@ namespace CoordsTelegram.App.Services
 {
     public interface ITelegramUserService
     {
-        Task<bool> AddTelegramUserAsync(CreateTelegramUserViewModel createTelegramUserViewModel);
+        Task<AddedTelegramUserViewModel> AddTelegramUserAsync(CreateTelegramUserViewModel createTelegramUserViewModel);
         Task<TelegramUser?> GetTelegramUserByChatIdAsync(string chatId);
     }
 }

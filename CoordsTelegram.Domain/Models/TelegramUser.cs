@@ -2,7 +2,7 @@
 {
     public class TelegramUser
     {
-        public string IdChat { get; set; }
+        public string ChatId { get; set; }
 
         public string PhoneNumber { get; set; }
 

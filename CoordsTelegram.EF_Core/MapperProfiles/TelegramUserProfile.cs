@@ -17,6 +17,9 @@ namespace CoordsTelegram.EF_Core.MapperProfiles
                .ReverseMap();
             CreateMap<AddTelegramUserCommand, CreateTelegramUserViewModel>()
                .ReverseMap();
+
+            CreateMap<TelegramUser, TelegramUserInfoViewModel>()
+               .ReverseMap();
         }
     }
 }

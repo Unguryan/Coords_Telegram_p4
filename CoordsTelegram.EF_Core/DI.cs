@@ -1,4 +1,4 @@
-﻿using CoordsTelegram.App.Services;
+﻿using CoordsTelegram.App.Repositories;
 using CoordsTelegram.EF_Core.Context;
 using CoordsTelegram.EF_Core.Services;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +17,11 @@ namespace CoordsTelegram.EF_Core
 
             services.AddDbContext<AuthLinkContext>();
             services.AddDbContext<TelegramUserContext>();
+            services.AddDbContext<TokenContext>();
+
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ITelegramUserRepository, TelegramUserRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
         }
     }
 }

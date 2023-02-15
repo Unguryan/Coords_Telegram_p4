@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CoordsTelegram.App.Commands.CreateAuthLink;
 using CoordsTelegram.App.Queries.GetAuthLink;
+using CoordsTelegram.App.Queries.GetTokenInfo;
 using CoordsTelegram.Domain.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,15 @@ namespace CoordsTelegram.API.Controllers
             var result = await _mediator.Send(new GetAuthLinkQuery(key));
 
             return _mapper.Map<AuthLinkExpiredViewModel>(result.AuthLink);
+        }
+
+        [HttpGet]
+        [Route("token/{token}")]
+        public async Task<GetTokenInfoViewModel> GetTokenInfo(string token)
+        {
+            var result = await _mediator.Send(new GetTokenInfoQuery(token));
+
+            return _mapper.Map<GetTokenInfoViewModel>(result);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoordsTelegram.App.Services;
+using CoordsTelegram.App.Repositories;
 using CoordsTelegram.Domain.Models;
 using CoordsTelegram.Domain.ViewModels;
 using CoordsTelegram.EF_Core.Context;
@@ -19,27 +19,27 @@ namespace CoordsTelegram.EF_Core.Services
             _mapper = mapper;
         }
 
-        public async Task<List<AuthLink>> GetAuthLinks()
+        public async Task<List<AuthLink>> GetAuthLinksAsync()
         {
             var result = new List<AuthLink>();
             await _context.AuthLinks.ForEachAsync(a => result.Add(_mapper.Map<AuthLink>(a)));
             return result;
         }
 
-        public async Task<List<AuthLink>> GetAuthLinksByChatId(string chatId)
+        public async Task<List<AuthLink>> GetAuthLinksByChatIdAsync(string chatId)
         {
             var result = new List<AuthLink>();
             await _context.AuthLinks.Where(x => x.ChatId == chatId).ForEachAsync(a => result.Add(_mapper.Map<AuthLink>(a)));
             return result;
         }
 
-        public async Task<AuthLink> GetAuthLinkByKey(string key)
+        public async Task<AuthLink> GetAuthLinkByKeyAsync(string key)
         {
             var entity = await _context.AuthLinks.FirstOrDefaultAsync(x => x.Key == key);
             return _mapper.Map<AuthLink>(entity);
         }
 
-        public async Task<bool> AddNewKey(string key)
+        public async Task<bool> AddNewKeyAsync(string key)
         {
             var addedEntity = await _context.AuthLinks.AddAsync(
                 new AuthLinkDbo() { 
@@ -55,7 +55,7 @@ namespace CoordsTelegram.EF_Core.Services
             return res > 0;
         }
 
-        public async Task<bool> ChangeByKey(string key, TelegramUserInfoViewModel infoViewModel)
+        public async Task<bool> ChangeByKeyAsync(string key, TelegramUserInfoViewModel infoViewModel)
         {
             var entity = await _context.AuthLinks.FirstOrDefaultAsync(x => x.Key == key);
 
@@ -68,14 +68,14 @@ namespace CoordsTelegram.EF_Core.Services
             entity.ChatId = infoViewModel.ChatId;
             entity.FullName = infoViewModel.FullName;
             entity.PhoneNumber = infoViewModel.PhoneNumber;
-            entity.PhoneNumber = infoViewModel.UserName;
+            entity.UserName = infoViewModel.UserName;
 
             var res = await _context.SaveChangesAsync();
 
             return res > 0;
         }
 
-        public async Task<bool> RemoveByKey(string key)
+        public async Task<bool> RemoveByKeyAsync(string key)
         {
             var entity = await _context.AuthLinks.FirstOrDefaultAsync(x => x.Key == key);
 
@@ -90,7 +90,7 @@ namespace CoordsTelegram.EF_Core.Services
             return res > 0;
         }
 
-        public async Task<int> RemoveRangeByKey(List<string> keys)
+        public async Task<int> RemoveRangeByKeyAsync(List<string> keys)
         {
             var entityToRemove = new List<AuthLinkDbo>();
 
@@ -112,7 +112,7 @@ namespace CoordsTelegram.EF_Core.Services
             return res;
         }
 
-        public async Task<bool> ChangeByKey(string key, string ChatId)
+        public async Task<bool> ChangeByKeyAsync(string key, string ChatId)
         {
             var entity = await _context.AuthLinks.FirstOrDefaultAsync(x => x.Key == key);
 

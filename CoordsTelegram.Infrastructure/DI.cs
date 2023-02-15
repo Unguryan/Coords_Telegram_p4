@@ -13,11 +13,14 @@ namespace CoordsTelegram.Infrastructure
             services.AddAssembly(configuration);
 
             services.AddScoped<IAuthLinkCreanerService, AuthLinkCreanerService>();
+            services.AddScoped<ITokenCreanerService, TokenCreanerService>();
             services.AddScoped<IAuthLinkGenerator, AuthLinkGenerator>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITelegramUserService, TelegramUserService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddHostedService<AuthLinkBackgroundService>();
+            services.AddHostedService<TokenBackgroundService>();
         }
     }
 }
