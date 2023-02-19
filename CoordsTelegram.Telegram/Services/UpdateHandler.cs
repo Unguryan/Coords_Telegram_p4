@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace CoordsTelegram.Telegram.Services;
 
@@ -31,6 +32,7 @@ public class UpdateHandler
             // UpdateType.Poll:
             { Message: { } message } => BotOnMessageReceived(message, cancellationToken),
             { CallbackQuery: { } callbackQuery } => BotOnCallbackQueryReceived(callbackQuery, cancellationToken),
+            { MyChatMember: { } myChatMemberQuery } => BotOnMyChatMemberQueryReceived(myChatMemberQuery, cancellationToken),
             //{ EditedMessage: { } message } => BotOnMessageReceived(message, cancellationToken),
             //{ InlineQuery: { } inlineQuery } => BotOnInlineQueryReceived(inlineQuery, cancellationToken),
             //{ ChosenInlineResult: { } chosenInlineResult } => BotOnChosenInlineResultReceived(chosenInlineResult, cancellationToken),
@@ -38,6 +40,18 @@ public class UpdateHandler
         };
 
         await handler;
+    }
+
+    private async Task BotOnMyChatMemberQueryReceived(ChatMemberUpdated myChatMemberQuery, CancellationToken cancellationToken)
+    {
+        var me = await _botClient.GetMeAsync();
+        //-1001896971722
+        if(myChatMemberQuery.Chat.Type == ChatType.Channel && myChatMemberQuery.NewChatMember.User.Id == me.Id)
+        {
+            var channelId = myChatMemberQuery.Chat.Id;
+            await _telegramMessageService.ReceiveNewChannel(channelId, myChatMemberQuery.From.Id, myChatMemberQuery.NewChatMember.Status);
+        }
+        //throw new NotImplementedException();
     }
 
     private async Task BotOnMessageReceived(Message message, CancellationToken cancellationToken)

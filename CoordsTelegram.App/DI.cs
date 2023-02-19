@@ -20,6 +20,14 @@ namespace CoordsTelegram.App
             var telegramOption = configuration.GetSection(TelegramBotOptions.SectionName);
             services.AddOptions<TelegramBotOptions>()
                     .Bind(telegramOption);
+
+            var rabbitMQSection = configuration.GetSection(RabbitMQOptions.SectionName);
+            services.AddOptions<RabbitMQOptions>()
+                    .Bind(rabbitMQSection);
+
+            var rabbitMQConfigurationSection = configuration.GetSection(RabbitMQConfiguration.SectionName);
+            services.AddOptions<RabbitMQConfiguration>()
+                   .Bind(rabbitMQConfigurationSection);
         }
     }
 }

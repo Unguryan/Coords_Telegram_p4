@@ -6,16 +6,33 @@ using CoordsTelegram.EF_Core;
 using CoordsTelegram.Infrastructure;
 using CoordsTelegram.EF_Core.Context;
 using CoordsTelegram.Notifications;
+using CoordsTelegram.Notifications.Hubs;
+using CoordsTelegram.EF_Core.Dbo;
+using CoordsTelegram.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEFCore(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
-//builder.Services.AddRabbit(builder.Configuration);
+builder.Services.AddRabbit(builder.Configuration);
 builder.Services.AddTelegramBot(builder.Configuration);
 builder.Services.AddNotifications(builder.Configuration);
 
-builder.Services.AddCors();
+var policyName = "defaultAngularCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(policyName, builder =>
+    {
+        builder.WithOrigins("https://localhost:44439")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            //.AllowAnyOrigin()
+            .AllowCredentials();
+    });
+});
+
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -29,12 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x =>
-{
-    x.AllowAnyOrigin()
-     .AllowAnyMethod()
-     .AllowAnyHeader();
-});
+app.UseCors(policyName);
 
 
 var botOptions = app.Services.GetRequiredService<IOptions<TelegramBotOptions>>();
@@ -59,6 +71,18 @@ using (var scope = app.Services.CreateScope())
     {
         await db.Database.EnsureCreatedAsync();
     }
+
+    using (var db = scope.ServiceProvider.GetRequiredService<TelegramChatContext>())
+    {
+        await db.Database.EnsureCreatedAsync();
+        if(!db.Admins.Any(x => x.Key == "360607028"))
+        {
+            await db.Admins.AddAsync(new AdminDbo() { Key = "360607028" });
+            await db.SaveChangesAsync();
+        }
+    }
 }
+
+app.MapHub<NotifyUsersHub>("/notificationsHub");
 
 app.Run();

@@ -10,6 +10,8 @@ namespace CoordsTelegram.Notifications
         public static void AddNotifications(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddSignalR();
+
         }
     }
 }

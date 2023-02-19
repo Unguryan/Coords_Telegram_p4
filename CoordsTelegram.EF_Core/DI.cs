@@ -17,10 +17,12 @@ namespace CoordsTelegram.EF_Core
 
             services.AddDbContext<AuthLinkContext>();
             services.AddDbContext<TelegramUserContext>();
+            services.AddDbContext<TelegramChatContext>();
             services.AddDbContext<TokenContext>();
 
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ITelegramUserRepository, TelegramUserRepository>();
+            services.AddScoped<ITelegramChatRepository, TelegramChatRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
         }
     }

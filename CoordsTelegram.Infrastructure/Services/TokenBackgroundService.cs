@@ -27,7 +27,7 @@ namespace CoordsTelegram.Infrastructure.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var timeout = 60000 - DateTime.Now.Second * 1000;
+                var timeout = 60 - DateTime.Now.Second;
                 await Task.Delay(TimeSpan.FromSeconds(timeout), stoppingToken);
 
                 try

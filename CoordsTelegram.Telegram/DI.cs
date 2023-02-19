@@ -6,6 +6,7 @@ using CoordsTelegram.TelegramBot.Services;
 using Telegram.Bot;
 using CoordsTelegram.Domain.Options;
 using Microsoft.Extensions.Options;
+using CoordsTelegram.App.Services;
 
 namespace CoordsTelegram.TelegramBot
 {
@@ -21,6 +22,7 @@ namespace CoordsTelegram.TelegramBot
                     return new TelegramBotClient(options, httpClient);
                 });
 
+            services.AddScoped<ITelegramChatService, TelegramChatService>();
             services.AddScoped<ITelegramMessageService, TelegramMessageService>();
             services.AddScoped<UpdateHandler>();
 

@@ -1,6 +1,10 @@
-﻿using CoordsTelegram.App.Commands.AddChatIdToAuthLink;
+﻿using CoordsTelegram.App.Commands.AddAdmin;
+using CoordsTelegram.App.Commands.AddChannel;
+using CoordsTelegram.App.Commands.AddChatIdToAuthLink;
 using CoordsTelegram.App.Commands.AddTelegramUser;
 using CoordsTelegram.App.Commands.AddUserToAuthLink;
+using CoordsTelegram.App.Commands.RemoveAdmin;
+using CoordsTelegram.App.Commands.RemoveChannel;
 using CoordsTelegram.App.Commands.SendLoginNotification;
 using CoordsTelegram.App.Queries.GetAuthLink;
 using CoordsTelegram.App.Queries.GetAuthLinkByChatId;
@@ -33,9 +37,21 @@ namespace CoordsTelegram.Telegram.Services
             return;
         }
 
+        public async Task ReceiveNewChannel(long channelId, long id, ChatMemberStatus status)
+        {
+            if(status == ChatMemberStatus.Administrator)
+            {
+                await _mediator.Send(new AddChannelCommand(channelId.ToString(), id.ToString()));
+            }
+            if(status == ChatMemberStatus.Kicked)
+            {
+                await _mediator.Send(new RemoveChannelCommand(channelId.ToString(), id.ToString()));
+            }
+        }
+
         public async Task ReceiveMessage(Message message)
         {
-         
+
             // START MESSAGE
             if (!string.IsNullOrEmpty(message.Text) && message.Text.StartsWith("/start auth="))
             {
@@ -43,17 +59,17 @@ namespace CoordsTelegram.Telegram.Services
 
                 var authLinkResult = await _mediator.Send(new GetAuthLinkQuery(authCode));
 
-                if(authLinkResult == null || !authLinkResult.IsFound || authLinkResult.AuthLink.IsExpired)
+                if (authLinkResult == null || !authLinkResult.IsFound || authLinkResult.AuthLink.IsExpired)
                 {
                     await SendMessageAsync(message.Chat, "Помилка. Перейдіть до сайту.");
                     return;
                 }
 
                 var telegramUserResult = await _mediator.Send(new GetTelegramUserQuery(message.Chat.Id.ToString()));
-                if(telegramUserResult == null || !telegramUserResult.IsFound)
+                if (telegramUserResult == null || !telegramUserResult.IsFound)
                 {
                     var res = await _mediator.Send(new AddChatIdToAuthLinkCommand(authCode, message.Chat.Id.ToString()));
-                    if(res == null || !res.IsUpdated)
+                    if (res == null || !res.IsUpdated)
                     {
                         await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{res?.ErrorMessage}");
                         return;
@@ -62,7 +78,7 @@ namespace CoordsTelegram.Telegram.Services
                     await SendRequestContactMessage(message.Chat);
                     return;
                 }
-                
+
                 var isAddedUserResult = await _mediator.Send(new AddUserToAuthLinkCommand(authCode, telegramUserResult.TelegramUser));
                 if (!isAddedUserResult.IsAdded)
                 {
@@ -105,7 +121,7 @@ namespace CoordsTelegram.Telegram.Services
                 }
 
                 var authLinkResult = await _mediator.Send(new GetAuthLinkByChatIdQuery(chatId));
-                if(authLinkResult == null || !authLinkResult.IsFound)
+                if (authLinkResult == null || !authLinkResult.IsFound)
                 {
                     await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{res?.ErrorMessage}");
                     return;
@@ -132,6 +148,35 @@ namespace CoordsTelegram.Telegram.Services
                     await SendMessageAsync(message.Chat, $"Помилка. Перейдіть до сайту.\n{notificationResult?.ErrorMessage}");
                 }
             }
+
+            if (!string.IsNullOrEmpty(message.Text) && message.Text.StartsWith("/addAdmin password"))
+            {
+                //360607028
+
+                var adminId = message.Text.Split(" ");
+                if (adminId.Length == 3 && adminId[2] != "360607028")
+                {
+                    var res = await _mediator.Send(new AddAdminCommand(adminId[2]));
+                }
+                else
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка.");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(message.Text) && message.Text.StartsWith("/removeAdmin password"))
+            {
+                //360607028
+                var adminId = message.Text.Split(" ");
+                if (adminId.Length == 3 && adminId[2] != "360607028")
+                {
+                    var res = await _mediator.Send(new RemoveAdminCommand(adminId[2]));
+                }
+                else
+                {
+                    await SendMessageAsync(message.Chat, $"Помилка.");
+                }
+            }
         }
 
         private async Task SendRequestContactMessage(Chat chat)
@@ -149,6 +194,7 @@ namespace CoordsTelegram.Telegram.Services
                                                   disableWebPagePreview: true,
                                                   replyMarkup: keyboard);
         }
+
 
         //private async Task SendMessageAsync(Chat chat, string text, InlineKeyboardMarkup keyboard = null)
         //{
