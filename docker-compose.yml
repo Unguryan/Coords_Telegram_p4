@@ -1,0 +1,52 @@
+version: '3.4'
+
+services:
+
+  ngrok:
+    image: devilbox/ngrok
+    ports:
+      - 4040:4040
+    depends_on:
+      - api
+    #command:
+    #  - http coords_telegram_p4-api-1:5003
+    environment:
+      - HTTP_TUNNELS=coords_telegram_p4-ngrok-1:coords_telegram_p4-api-1:5003
+    #  - PARAMS=http coords_telegram_p4-api-1:5003
+    #  - DOMAIN=coords_telegram_p4-ngrok-1
+    #  - PORT=4551
+      - AUTHTOKEN={YOUR TOKEN}
+    networks:
+      - coords_net
+
+  api:
+    build: ./
+    ports:
+      - '5003:5003'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5003
+      #- ASPNETCORE_URLS=https://+:5001;http://+:5000
+      #- ASPNETCORE_HTTPS_PORT=5001
+      #- ASPNETCORE_Kestrel__Certificates__Default__Password=mypassword123
+      #- ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    #volumes:
+    #  - ./webapi/https/aspnetapp.pfx:/https/aspnetapp.pfx:ro
+    restart: always
+    networks:
+      - coords_net
+
+
+networks:
+  coords_net:
+    name: coords_net
+    external: true
+  
+    
+    
+#    networks:
+#      - coords_net
+#networks:
+#  coords_net:
+#    external: true
+

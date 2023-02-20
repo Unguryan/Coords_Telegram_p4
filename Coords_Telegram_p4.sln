@@ -27,7 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordsTelegram.EF_Core", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordsTelegram.TelegramBot", "CoordsTelegram.Telegram\CoordsTelegram.TelegramBot.csproj", "{ECA1BA19-D7C9-4D31-94C4-6850FF2EA787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordsTelegram.Notifications", "CoordsTelegram.Notifications\CoordsTelegram.Notifications.csproj", "{DFFBE11B-164D-46F7-BE8F-181C9D2A94A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordsTelegram.Notifications", "CoordsTelegram.Notifications\CoordsTelegram.Notifications.csproj", "{DFFBE11B-164D-46F7-BE8F-181C9D2A94A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{EFEE068C-FBD1-4C19-B467-F0E387843B76}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
